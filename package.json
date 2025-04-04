@@ -1,0 +1,23 @@
+{
+  "name": "sprint3-tp3",
+  "version": "1.0.0",
+  "description": "Trabajo practico 3 del Sprint 3",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leandroeponce/sprint3-tp3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leandroeponce/sprint3-tp3/issues"
+  },
+  "homepage": "https://github.com/leandroeponce/sprint3-tp3#readme",
+  "dependencies": {
+    "ejs": "^3.1.10"
+  }
+}
