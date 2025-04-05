@@ -8,13 +8,19 @@
 </head>
 <body class="bg-gray-100 p-6">
     <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold text-gray-700 text-center mb-4">Lista de Superhéroes</h1>
+        <div class="flex justify-between items-center mb-4">
+            <h1 class="text-2xl font-bold text-gray-700">Lista de Superhéroes</h1>
+            <a href="/api/createhero" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                Agregar Superhéroe
+            </a>
+        </div>
         <table class="w-full border-collapse border border-gray-300">
             <thead>
                 <tr class="bg-gray-200">
                     <th class="border border-gray-300 px-4 py-2">ID</th>
                     <th class="border border-gray-300 px-4 py-2">Nombre</th>
                     <th class="border border-gray-300 px-4 py-2">Poder</th>
+                    <th class="border border-gray-300 px-4 py-2">Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,12 +28,29 @@
                     <tr class="hover:bg-gray-100">
                         <td class="border border-gray-300 px-4 py-2"><%= hero._id %></td>
                         <td class="border border-gray-300 px-4 py-2"><%= hero.nombreSuperHeroe %></td>
-                        <td class="border border-gray-300 px-4 py-2"><%= hero.poderes %></td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <% 
+                                let poderesArray = Array.isArray(hero.poderes) 
+                                    ? hero.poderes 
+                                    : String(hero.poderes).split(',');
+                            %>
+                            <% poderesArray.forEach(poder => { %>
+                                <span class="inline-block bg-slate-200 text-blue-800 px-2 py-1 rounded mr-1 mb-2">
+                                    <%= poder.trim() %>
+                                </span>
+                            <% }) %>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2 text-center">
+                            <a href="/heroes/id/<%= hero._id %>" class="bg-blue-500 text-white px-2 py-1 rounded">Editar</a>
+                            <form action="/heroes/eliminar/<%= hero._id %>" method="POST" style="display:inline;">
+                                <button type="submit" class="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 mt-2">Eliminar</button>
+                            </form>
+                        </td>
                     </tr>
                 <% }) %>
             </tbody>
         </table>
     </div>
-    <a href="/api/createhero" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Agregar Superhéroe</a>
+    
 </body>
 </html>

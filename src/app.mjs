@@ -3,6 +3,7 @@ import { connectDB } from './config/dbConfig.mjs'
 import superHeroRoutes from './routes/superHeroRoutes.mjs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import methodOverride from 'method-override'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 3000;
 //Conexión a MongoDB
 connectDB()
 
+app.use(methodOverride('_method'))
 app.use(express.urlencoded({ extended: true }))
 
 //Configuración de ejs como motor de vistas

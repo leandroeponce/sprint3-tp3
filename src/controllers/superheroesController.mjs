@@ -1,20 +1,21 @@
 import { getSuperHeroById, getAllSuperHeroes, findSuperHeroesByAttribute, getSuperHeroesOver30, insertSuperHero, updateSuperHero, deleteSuperHeroById, deleteSuperHeroByHeroName } from '../services/superheroesService.mjs'
-import { renderizarSuperheroe, renderizarListaSuperheroes, } from '../views/responseView.mjs'
+import { validationResult } from 'express-validator'
 
 export async function obtenerSuperheroePorIdController(req, res) {
     try {
         const { id } = req.params
         const superheroe =  await getSuperHeroById(id)
         if (!superheroe) {
-            return res.status(404).send({ mensaje: 'Superhéroe no encontrado' })
+            return res.status(404).render('error', { mensaje: 'Superhéroe no encontrado' })
         }
 
-        const superheroeFormateado =  renderizarSuperheroe(superheroe)
-        res.status(200).json(superheroeFormateado)
+        res.render('editSuperhero', { datos: superheroe })
     }
     catch (error) {
-        res.status(500).send({ mensaje: 'Error al obtener el superhéroe',
-        error: error.message})
+        res.status(500).render('error', {
+            mensaje: 'Error al obtener el superhéroe',
+            error: error.message
+        })
     }
 }
 
@@ -22,8 +23,7 @@ export async function obtenerTodosLosSuperheroesController(req, res) {
     try {
         const superheroes = await getAllSuperHeroes()
 
-        const superheroesFormateados = renderizarListaSuperheroes(superheroes)
-        res.status(200).json(superheroesFormateados)
+        res.render('dashboard', { heroes: superheroes })
     }
     catch (error)  {
         res.status(500).send({ mensaje: 'Error al obtener los superhéroes', error: error.message })
@@ -61,12 +61,23 @@ export async function obtenerSuperheroesMayoresDe30Controller(req, res) {
 }
 
 export async function insertSuperHeroController(req, res) {
+    const errores = validationResult(req)
+
+    if(!errores.isEmpty()){
+        return res.status(400).render('createSuperHero', {
+            errores: errores.array(),
+            datos: req.body
+        })
+    }
     try {
         console.log("Datos recibidos: ", req.body)
 
         const { nombreSuperHeroe, nombreReal, edad, poderes, planetaOrigen, debilidad, aliados, enemigos, creador } = req.body
         if (!nombreSuperHeroe || !nombreReal || !edad || !poderes || poderes.length === 0) {
-            return res.status(400).send({ mensaje: 'Faltan datos obligatorios.' })
+            return res.status(400).render('createSuperHero', {
+                errores: [{ msg: 'Faltan datos obligatorios.' }],
+                datos: req.body
+            })
         }
 
         const superheroe = await insertSuperHero({
@@ -80,11 +91,13 @@ export async function insertSuperHeroController(req, res) {
             enemigos,
             creador
         })
-        const superheroeFormateado = renderizarSuperheroe(superheroe)
-        res.status(200).json(superheroeFormateado)
+        res.render('success', { mensaje: 'Superhéroe agregado correctamente.' });
     }
     catch (error)  {
-        res.status(500).send({ mensaje: 'Error al insertar el superhéroe', error: error.message })
+        res.status(500).render('error', {
+            mensaje:'Error al insertar el superhéroe',
+            error: error.message
+        })
     }
 }
 
