@@ -9,7 +9,7 @@
     <div class="max-w-xl mx-auto bg-white shadow-lg rounded-xl p-6">
         <h1 class="text-2xl font-bold mb-4">Editar Superhéroe</h1>
 
-        <form action="/heroes/edit" method="POST" class="space-y-4">
+        <form action="/api/heroes/edit/<%= datos._id %>?_method=PUT" method="POST" class="space-y-4">
             <!-- Campo oculto con el ID del superhéroe para actualizar -->
             <input type="hidden" name="id" value="<%= datos._id %>">
 
