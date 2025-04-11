@@ -6,28 +6,37 @@
     <title>Dashboard - Superhéroes</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-md max-w-7xl w-full overflow-x-auto">
         <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold text-gray-700">Lista de Superhéroes</h1>
             <a href="/api/heroes/agregar" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
                 Agregar Superhéroe
             </a>
         </div>
-        <table class="w-full border-collapse border border-gray-300">
+        <table class="w-full border-collapse border border-gray-300 text-sm">
             <thead>
                 <tr class="bg-gray-200">
-                    <th class="border border-gray-300 px-4 py-2">ID</th>
-                    <th class="border border-gray-300 px-4 py-2">Nombre</th>
-                    <th class="border border-gray-300 px-4 py-2">Poder</th>
+                    <th class="border border-gray-300 px-4 py-2">Nombre Superhéroe</th>
+                    <th class="border border-gray-300 px-4 py-2">Nombre Real</th>
+                    <th class="border border-gray-300 px-4 py-2">Edad</th>
+                    <th class="border border-gray-300 px-4 py-2">Planeta de Origen</th>
+                    <th class="border border-gray-300 px-4 py-2">Debilidad</th>
+                    <th class="border border-gray-300 px-4 py-2">Poderes</th>
+                    <th class="border border-gray-300 px-4 py-2">Aliados</th>
+                    <th class="border border-gray-300 px-4 py-2">Enemigos</th>
+                    <th class="border border-gray-300 px-4 py-2">Creador</th>
                     <th class="border border-gray-300 px-4 py-2">Acciones</th>
                 </tr>
             </thead>
             <tbody>
                 <% heroes.forEach(hero => { %>
                     <tr class="hover:bg-gray-100">
-                        <td class="border border-gray-300 px-4 py-2"><%= hero._id %></td>
                         <td class="border border-gray-300 px-4 py-2"><%= hero.nombreSuperHeroe %></td>
+                        <td class="border border-gray-300 px-4 py-2"><%= hero.nombreReal %></td>
+                        <td class="border border-gray-300 px-4 py-2"><%= hero.edad %></td>
+                        <td class="border border-gray-300 px-4 py-2"><%= hero.planetaOrigen %></td>
+                        <td class="border border-gray-300 px-4 py-2"><%= hero.debilidad %></td>
                         <td class="border border-gray-300 px-4 py-2">
                             <% 
                                 let poderesArray = Array.isArray(hero.poderes) 
@@ -40,6 +49,32 @@
                                 </span>
                             <% }) %>
                         </td>
+                        
+                        <td class="border border-gray-300 px-4 py-2">
+                            <%
+                                let aliadosArray = Array.isArray(hero.aliados)
+                                    ? hero.aliados
+                                    : String(hero.aliados).split(',');
+                            %>
+                            <% aliadosArray.forEach(aliado => { %>
+                                <span class="inline-block bg-slate-200 text-blue-800 px-2 py-1 rounded mr-1 mb-2">
+                                    <%= aliado.trim() %>
+                                </span>  
+                            <% }) %>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2">
+                            <%
+                                let enemigosArray = Array.isArray(hero.enemigos)
+                                    ? hero.enemigos
+                                    : String(hero.enemigos).split(',');
+                            %>
+                            <% enemigosArray.forEach(enemigo => { %>
+                                <span class="inline-block bg-slate-200 text-blue-800 px-2 py-1 rounded mr-1 mb-2">
+                                    <%= enemigo.trim() %>
+                                </span>  
+                            <% }) %>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-2"><%= hero.creador %></td>
                         <td class="border border-gray-300 px-4 py-2 text-center">
                             <a href="/api/heroes/edit/<%= hero._id %>" class="bg-blue-500 text-white px-2 py-1 rounded">Editar</a>
                             <form action="/api/heroes/<%= hero._id %>?_method=DELETE" method="POST" style="display:inline;" onsubmit="return confirmarEliminacion('<%= hero.nombreSuperHeroe %>')">

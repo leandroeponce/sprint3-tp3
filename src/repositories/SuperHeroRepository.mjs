@@ -10,6 +10,17 @@ class SuperHeroRepository extends IRepository {
         return await superHero.find()
     }
 
+    async insertSuperHero(data) {
+        try {
+            const newHero = new superHero(data);
+            const resultado = await newHero.save();
+            return resultado;
+        } catch (error) {
+            console.error("Error al guardar el superhéroe:", error.message);
+            throw error;
+        }
+    }
+
     //Actualización de documento
     async  updateSuperHero(id, data) {
         const updatedHero = await superHero.findOneAndUpdate(

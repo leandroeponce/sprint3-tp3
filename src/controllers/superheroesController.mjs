@@ -9,7 +9,7 @@ export async function obtenerSuperheroePorIdController(req, res) {
             return res.status(404).render('error', { mensaje: 'Superhéroe no encontrado' })
         }
 
-        res.render('editSuperhero', { datos: superheroe })
+        res.render('editSuperhero', { datos: superheroe, errores: [] })
     }
     catch (error) {
         res.status(500).render('error', {
@@ -59,9 +59,9 @@ export async function insertSuperHeroController(req, res) {
             debilidad,
             aliados,
             enemigos,
-            creador
+            creador: "Leandro"
         })
-        res.render('success', { mensaje: 'Superhéroe agregado correctamente.' });
+        res.render('success', { nombre: superheroe.nombreSuperHeroe, mensaje: 'Superhéroe agregado correctamente.' });
     }
     catch (error)  {
         res.status(500).render('error', {
@@ -78,7 +78,7 @@ export async function updateSuperHeroController(req, res) {
         if(!errores.isEmpty()){
             return res.status(400).render('editSuperHero', {
                 errores: errores.array(),
-                datos: { ...req.boy, _id }
+                datos: { ...req.body, _id: id }
             })
         }
 
@@ -91,7 +91,7 @@ export async function updateSuperHeroController(req, res) {
             poderes: req.body.poderes.split(',').map(p => p.trim()),
             aliados: req.body.aliados?.split(',').map(a => a.trim()),
             enemigos: req.body.enemigos?.split(',').map(e => e.trim()),
-            creador: req.body.creador
+            creador: "Leandro"
         }
         const superheroeActualizado = await updateSuperHero(id, datos)
         
@@ -99,7 +99,7 @@ export async function updateSuperHeroController(req, res) {
             return res.status(404).render('error', { mensaje: 'Superhéroe no encontrado'})
         }
 
-        res.render('success', { mensaje: 'Superhéroe actualizado correctamente.' })
+        res.render('success', { nombre: superheroeActualizado.nombreSuperHeroe, mensaje: 'Superhéroe actualizado correctamente.' })
     }
     catch (error)  {
         res.status(500).render('error', { mensaje: 'Error al actualizar el superhéroe', error: error.message })
